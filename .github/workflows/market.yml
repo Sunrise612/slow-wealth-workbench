@@ -1,0 +1,41 @@
+name: Daily market data
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '20 10 * * 1-5'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: pages-market
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Update completed daily bars
+        run: node scripts/update-market.mjs
+      - name: Commit market data
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/market.json
+          git diff --cached --quiet || git commit -m "Update delayed daily market data"
+          git push
+      - uses: actions/configure-pages@v5
+      - name: Prepare static site
+        run: |
+          mkdir _site
+          cp index.html .nojekyll _site/
+          cp -r assets data _site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4

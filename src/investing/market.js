@@ -12,7 +12,7 @@ export const instruments = [
   ...originalInstruments,
   cn('159915', '创业板ETF', '宽基ETF'), cn('588000', '科创50ETF', '宽基ETF'),
   cn('512800', '银行ETF', '行业ETF'), cn('512660', '军工ETF', '行业ETF'),
-  cn('513100', '纳指ETF', '跨境ETF'), cn('518880', '黄金ETF', '黄金ETF'),
+  cn('513100', '纳指ETF', '跨境ETF'), cn('518880', '黄金ETF', '黄金ETF', '跟踪人民币黄金价格，不等于金饰或实物黄金。金价、汇率和基金溢折价会影响收益；黄金不产生利息。'),
   cn('000001', '平安银行'), cn('000333', '美的集团'), cn('000651', '格力电器'),
   cn('002594', '比亚迪'), cn('600036', '招商银行'), cn('601318', '中国平安'),
   cn('600900', '长江电力'), cn('601088', '中国神华'), cn('600030', '中信证券'),
@@ -31,6 +31,8 @@ export const instruments = [
   overseas('BND', '美国综合债券ETF', 'US', '105.BND', 1, '债券ETF'),
   overseas('TLT', '美国长期国债ETF', 'US', '105.TLT', 1, '债券ETF'),
   overseas('SCHD', '美国红利ETF', 'US', '107.SCHD', 1, '红利ETF'),
+  { ...overseas('GLD', 'SPDR黄金ETF', 'US', '107.GLD', 1, '黄金ETF'), risk: '美元计价黄金ETF，受金价、基金费用和汇率影响；不产生利息，不等于持有金饰。' },
+  { ...overseas('IAU', 'iShares黄金ETF', 'US', '107.IAU', 1, '黄金ETF'), risk: '美元计价黄金信托ETF，存在金价、费用及汇率风险；不提供固定被动收入。' },
 ].map(item => ({ market: 'CN', currency: 'CNY', lotSize: 100, ...item, tPlusOne: !item.market && !['513100', '518880', '511010'].includes(item.symbol), priceLimit: item.market ? null : item.symbol.startsWith('588') || item.symbol.startsWith('159915') ? 0.2 : ['513100', '518880', '511010'].includes(item.symbol) ? null : 0.1 }));
 
 export const marketLabels = { CN: 'A股', HK: '港股', US: '美股' };
